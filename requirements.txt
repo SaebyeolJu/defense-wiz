@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+greenlet
+alembic
+pydantic
+pydantic-settings
+qdrant-client
+requests

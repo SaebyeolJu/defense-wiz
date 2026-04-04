@@ -1,0 +1,22 @@
+DefenseWiz 프로젝트 보고서.pdf
+.vscode/
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database files
+*.sqlite3
+
+# Data folders
+data/
