@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "defense_wiz")
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
+
+    # API
+    OC_ID: str = os.getenv("OC_ID", "qufdl199")
     
     # Qdrant
     QDRANT_HOST: str = os.getenv("QDRANT_HOST", "localhost")
