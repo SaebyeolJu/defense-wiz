@@ -8,7 +8,25 @@ class ParserService:
     def normalize_text(self, text: str) -> str:
         if not text:
             return ""
-        # 중복 공백 제거 및 trim
+            
+        # 1. 원문자 기호(①, ②...)를 일반 숫자와 마침표로 치환 (예: ① -> 1. )
+        circle_map = {
+            '①': '1. ', '②': '2. ', '③': '3. ', '④': '4. ', '⑤': '5. ',
+            '⑥': '6. ', '⑦': '7. ', '⑧': '8. ', '⑨': '9. ', '⑩': '10. ',
+            '⑪': '11. ', '⑫': '12. ', '⑬': '13. ', '⑭': '14. ', '⑮': '15. ',
+            '⑯': '16. ', '⑰': '17. ', '⑱': '18. ', '⑲': '19. ', '⑳': '20. '
+        }
+        for k, v in circle_map.items():
+            text = text.replace(k, v)
+        
+        # 2. 특수 제어 문자 제거 (공백, 줄바꿈 제외)
+        text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', text)
+        
+        # 3. 구두점 뒤 띄어쓰기 교정 (예: "개선,방위" -> "개선, 방위")
+        text = re.sub(r'([,;])(?=[^\s\d])', r'\1 ', text)
+        text = re.sub(r'([.])(?=[\u3131-\u3163\uAC00-\uD7A3a-zA-Z])', r'\1 ', text)
+
+        # 4. 중복 공백 다중 스페이스 하나로 병합 및 trim
         return re.sub(r'\s+', ' ', text.strip())
 
     def normalize_circle_number(self, text: str) -> str:
@@ -31,24 +49,6 @@ class ParserService:
                 result.append(char)
                 
         return "".join(result)
-
-        
-    def normalize_circle_number(self, text: str) -> str:
-        """원문자(①, ②...)를 아라비아 숫자(1, 2...)로 변환"""
-        if not text:
-            return ""
-        circle_map = {
-            '①': '1', '②': '2', '③': '3', '④': '4', '⑤': '5',
-            '⑥': '6', '⑦': '7', '⑧': '8', '⑨': '9', '⑩': '10',
-            '⑪': '11', '⑫': '12', '⑬': '13', '⑭': '14', '⑮': '15',
-            '⑯': '16', '⑰': '17', '⑱': '18', '⑲': '19', '⑳': '20'
-        }
-        result = text
-        for k, v in circle_map.items():
-            result = result.replace(k, v)
-        return result
-
-
     def _get_text(self, item: Any) -> str:
         """xmltodict로 변환된 dict 또는 string에서 텍스트 추출"""
         if item is None:
